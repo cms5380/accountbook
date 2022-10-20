@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.charminseok.accountbook.repository.AccountBookMapper">
+
+    <select id="selectAccountBookList" resultType="com.charminseok.accountbook.domain.AccountBook">
+        SELECT * FROM ACCOUNT_BOOK WHERE user_id = #{userId} AND DELETE_YN = 'N';
+    </select>
+
+    <select id="selectAccountBook" resultType="com.charminseok.accountbook.domain.AccountBook">
+        SELECT * FROM ACCOUNT_BOOK WHERE ID = #{accountBookId}
+    </select>
+
+    <insert id="insertMoneyInfo">
+        INSERT INTO ACCOUNT_BOOK (USER_ID, money, memo, delete_yn, create_date, modify_date)
+        VALUES (#{userId}, #{money}, #{memo}, 'N', now(), now())
+    </insert>
+
+    <update id="updateMoneyInfo">
+        UPDATE ACCOUNT_BOOK
+        SET MONEY=#{money}, MEMO=#{memo}, MODIFY_DATE=now()
+        WHERE USER_ID = #{userId} AND ID=#{accountBookId}
+    </update>
+
+    <update id="deleteAccountBook">
+        UPDATE ACCOUNT_BOOK
+        SET DELETE_YN = 'Y'
+        WHERE USER_ID = #{userId} AND ID=#{accountBookId}
+    </update>
+
+    <select id="selectDeletedAccountBook" resultType="com.charminseok.accountbook.domain.AccountBook">
+        SELECT * FROM ACCOUNT_BOOK WHERE user_id = #{id} AND DELETE_YN = 'Y';
+    </select>
+
+    <update id="restoreAccountBook">
+        UPDATE ACCOUNT_BOOK
+        SET DELETE_YN='N'
+        WHERE ID=#{accountBookId}
+    </update>
+</mapper>
